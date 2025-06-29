@@ -1,0 +1,204 @@
+---
+title: "canonical analysis"
+author: "ME"
+date: "2025-04-26"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+library(tidyverse)
+```
+
+
+```{r}
+# 1. Charger les données
+data <- data.frame(
+  SBP    = c(120, 109, 130, 121, 135, 140),
+  DBP    = c(76,  80,  82,  78,  85,  87),
+  Height = c(165,180, 170, 185, 180,187),
+  Weight = c(60, 80,  70,  85,  90,87)
+)
+```
+
+```{r}
+correlation_matrix <- cor(data)
+print("Matrice de corrélation entre les 4 variables :")
+print(round(correlation_matrix, 3))
+```
+
+
+# 2. Séparer X et Y 
+```{r}
+
+X <- (data[, c("SBP", "DBP")])
+Y <- (data[, c("Height", "Weight")])
+```
+
+# 3. Calculer les matrices de covariance
+```{r}
+
+Sxx <- cov(X)         # Covariance de X
+Syy <- cov(Y)         # Covariance de Y
+Sxy <- cov(X, Y)      # Covariance croisée X–Y
+Syx <- t(Sxy)
+
+Sxx
+Syy
+#la diagonale représente la variance de chaque variable
+Sxy
+Syx#identique à Sxy
+```
+
+# 4. Construire la matrice du problème généralisé
+```{r}
+
+#    on résout : Sxx^{-1} Sxy Syy^{-1} Syx v = λ v
+M <- solve(Sxx) %*% Sxy %*% solve(Syy) %*% Syx
+M
+```
+
+# 5. Décomposition spectrale de M
+```{r}
+
+eig <- eigen(M)
+
+lambda <- eig$values # valeurs propres (λ1 ≥ λ2 ≥ …)
+
+A      <- eig$vectors # vecteurs propres pour X
+```
+
+On prend 1-1 pour p,dérer x1 et 2-1 pour pondérer x2, c'est a dire les val. du 1er eigen vector [,1]
+
+```{r}
+print("Valeurs propres de M (λ) :")
+print(round(lambda, 3))
+
+print("Vecteurs propres de M (colonnes correspondant à λ) :")
+print(round(A, 3))
+
+# Vérification du nombre de valeurs/vecteurs propres
+cat("\nNombre de valeurs propres :", length(lambda), "\n")
+cat("Nombre de vecteurs propres :", ncol(A), "\n")
+
+```
+
+Construire la matrice du problème généralisé
+```{r}
+# 6. 
+#    b_j = Syy^{-1} Syx a_j / sqrt(λ_j)
+N <- solve(Syy) %*% Syx %*% solve(Sxx) %*% Sxy
+N
+```
+Calculer les vecteurs canoniques N pour Y
+# 5. Décomposition spectrale de N
+```{r}
+
+eig <- eigen(N)
+
+lambda <- eig$values # valeurs propres (λ1 ≥ λ2 ≥ …)
+
+B      <- eig$vectors # vecteurs propres pour X
+```
+
+On prend 1-1 pour pondérer y1 et 2-1 pour pondérer y2, c'est a dire les val. du 1er eigen vector [,1]
+
+```{r}
+print("Valeurs propres de N (λ) :")
+print(round(lambda, 3))
+
+print("Vecteurs propres de N (colonnes correspondant à λ) :")
+print(round(A, 3))
+
+# Vérification du nombre de valeurs/vecteurs propres
+cat("\nNombre de valeurs propres :", length(lambda), "\n")
+cat("Nombre de vecteurs propres :", ncol(A), "\n")
+
+```
+
+# 7. Les corrélations canoniques sont √λ
+la racine carrée de la plus grande valeur propre (eigen value) est le coef de correraltion r pearson entre X et Y
+```{r}
+canonical_correlations <- sqrt(lambda)
+canonical_correlations
+```
+
+
+```{r}
+# 9. Afficher les résultats
+print("Corrélations canoniques :")
+print(canonical_correlations)
+
+print("Coefficients canoniques a (pour X) :")
+print(round(A, 3))
+
+print("Coefficients canoniques b (pour Y) :")
+print(round(B, 3))
+```
+
+
+```{r}
+# 10. Formules « à la TileStats »
+for (j in seq_along(lambda)) {
+  cat(sprintf("\nU%d = %.3f×SBP + %.3f×DBP\n",
+              j, A[1,j], A[2,j]))
+  cat(sprintf("V%d = %.3f×Height + %.3f×Weight\n",
+              j, B[1,j], B[2,j]))
+}
+
+#A quoi servent U2 et V2: 2e eigen vector, on peut aussi l'utiliser mais variance expliquée résiduelle
+
+# et si on regarde la 2e eigen value, sa racine carré donne un coef r minime
+```
+
+# 8.Calcul des var combinées
+```{r}
+
+data$X<-(0.131*data$SBP+(-0.991)*data$DBP)
+
+data$Y<-(0.426*data$Height+(-0.905)*data$Weight)
+```
+
+# 9.Calcul des zscores des var combinées
+```{r}
+mx<-mean(data$X)
+sdx<-sd(data$X)
+
+my<-mean(data$Y)
+sdy<-sd(data$Y)
+
+data$zX<-((data$X-mx))/sdx
+data$zY<-((data$Y-my))/sdy
+```
+
+# 11. (Optionnel) Tracé de la 1ᵉ paire de variates
+```{r}
+
+plot(U1, V1,
+     xlab = "U1 (X variate)",
+     ylab = "V1 (Y variate)",
+     main = "1ère composante canonique",
+     pch = 19, col = "blue")
+abline(lm(V1 ~ U1), col = "red", lwd = 2)
+
+```
+
+correlation entre les 4 variables non standardisées et les zscores
+```{r}
+#library(dplyr)
+subdata<-data%>%
+  select(SBP,DBP, Height,Weight,zX,zY)
+correlation <- cor(subdata)
+print("Matrice de corrélation entre les 4 variables :")
+print(round(correlation, 3))
+
+#le coef de corr entre les variables et leur variate (zscore) correspondant s'appelle canonical loadings
+#et peut s'interpreter comme une PCA
+
+#le coef de corr entre les variables et leur variate (zscore) opposés s'appelle canonical cross-loadings
+```
+
+
