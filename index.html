@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infographie : L'Analyse Canonique</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F0F4F8;
+        }
+        .flow-arrow {
+            color: #0A9396;
+            font-weight: bold;
+            font-size: 2.5rem;
+            text-align: center;
+            opacity: 0.7;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 450px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+
+        <header class="text-center my-8 md:my-16">
+            <h1 class="text-5xl md:text-7xl font-black text-[#005F73] tracking-tight">L'Analyse Canonique</h1>
+            <p class="text-xl md:text-2xl mt-4 text-[#0A9396]">Découvrir les Relations entre Deux Ensembles de Variables</p>
+        </header>
+
+        <section class="mb-12 md:mb-16 bg-white rounded-lg shadow-xl p-6 md:p-8 border-l-4 border-[#005F73]">
+            <h2 class="text-2xl md:text-3xl font-bold text-[#005F73] mb-4 text-center">Qu'est-ce que l'Analyse Canonique ?</h2>
+            <p class="text-base md:text-lg text-gray-700 text-center max-w-4xl mx-auto">
+                L'**Analyse de Corrélation Canonique (ACC)** est une technique statistique multivariée qui explore les relations entre **deux ensembles de variables**. Contrairement aux méthodes qui analysent une seule variable dépendante (comme la régression), l'ACC identifie les combinaisons linéaires de variables au sein de chaque ensemble qui sont le plus fortement corrélées entre elles. Cela permet de révéler des dimensions de relation sous-jacentes qui seraient autrement difficiles à détecter.
+            </p>
+        </section>
+
+        <section class="mb-12 md:mb-16 bg-white rounded-lg shadow-xl p-6 md:p-8">
+            <h2 class="text-2xl md:text-3xl font-bold text-[#0A9396] mb-8 text-center">Comment ça Marche ? (Le Principe)</h2>
+            <p class="text-center text-gray-700 max-w-4xl mx-auto mb-8">L'analyse canonique synthétise l'information de chaque ensemble de variables en créant de nouvelles "variates canoniques", puis mesure leur corrélation maximale.</p>
+            <div class="flex flex-col items-center justify-center space-y-6">
+                <div class="flex flex-col md:flex-row items-center justify-center md:space-x-8 space-y-4 md:space-y-0 w-full">
+                    <div class="bg-[#94D2BD] bg-opacity-30 text-[#005F73] p-4 rounded-lg shadow-md font-bold text-center w-full max-w-sm">
+                        Ensemble de Variables X
+                        <div class="text-sm font-normal mt-2">(Ex: Revenu, Éducation, Âge)</div>
+                    </div>
+                    <div class="text-4xl text-gray-400 font-bold hidden md:block">+</div>
+                    <div class="bg-[#94D2BD] bg-opacity-30 text-[#005F73] p-4 rounded-lg shadow-md font-bold text-center w-full max-w-sm">
+                        Ensemble de Variables Y
+                        <div class="text-sm font-normal mt-2">(Ex: Satisfaction, Fidélité, Dépenses)</div>
+                    </div>
+                </div>
+                <div class="flow-arrow">↓</div>
+                <div class="bg-[#0A9396] text-white p-4 rounded-lg shadow-md font-bold text-center w-full max-w-md">
+                    Création de Variates Canoniques (U & V)
+                    <div class="text-sm font-normal mt-2">(Combinaisons linéaires de variables de chaque ensemble)</div>
+                </div>
+                <div class="flow-arrow">↓</div>
+                <div class="flex flex-col md:flex-row items-center justify-center md:space-x-8 space-y-4 md:space-y-0 w-full">
+                     <div class="bg-white border-2 border-[#EE9B00] text-[#005F73] p-4 rounded-lg shadow-md font-bold text-center w-full max-w-sm">
+                        Variate Canonique U1
+                    </div>
+                    <div class="text-4xl text-[#CA6702] font-bold">↔️</div>
+                    <div class="bg-white border-2 border-[#EE9B00] text-[#005F73] p-4 rounded-lg shadow-md font-bold text-center w-full max-w-sm">
+                        Variate Canonique V1
+                    </div>
+                </div>
+                <p class="text-lg font-bold text-[#EE9B00] mt-4">Maximisation de la Corrélation entre U1 et V1</p>
+            </div>
+        </section>
+
+        <section class="mb-12 md:mb-16">
+            <h2 class="text-2xl md:text-3xl font-bold text-[#005F73] mb-8 text-center">Concepts Clés à Maîtriser</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-5 rounded-lg shadow-md border-b-4 border-[#0A9396]">
+                    <h3 class="text-xl font-bold text-[#005F73] mb-2">Variates Canoniques</h3>
+                    <p class="text-gray-600 text-sm">Les nouvelles variables composites créées à partir des ensembles originaux.</p>
+                </div>
+                <div class="bg-white p-5 rounded-lg shadow-md border-b-4 border-[#0A9396]">
+                    <h3 class="text-xl font-bold text-[#005F73] mb-2">Corrélations Canoniques</h3>
+                    <p class="text-gray-600 text-sm">La corrélation de Pearson entre chaque paire de variates canoniques.</p>
+                </div>
+                <div class="bg-white p-5 rounded-lg shadow-md border-b-4 border-[#0A9396]">
+                    <h3 class="text-xl font-bold text-[#005F73] mb-2">Charges Canoniques</h3>
+                    <p class="text-gray-600 text-sm">Mesurent la corrélation entre chaque variable originale et sa variate canonique.</p>
+                </div>
+                <div class="bg-white p-5 rounded-lg shadow-md border-b-4 border-[#0A9396]">
+                    <h3 class="text-xl font-bold text-[#005F73] mb-2">Indice de Redondance</h3>
+                    <p class="text-gray-600 text-sm">Quantifie la variance d'un ensemble expliquée par l'autre via les variates.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-12 md:mb-16">
+            <h2 class="text-2xl md:text-3xl font-bold text-[#0A9396] mb-8 text-center">Domaines d'Application</h2>
+            <p class="text-center text-gray-700 max-w-4xl mx-auto mb-8">L'analyse canonique est un outil polyvalent, utilisé pour comprendre des relations complexes dans divers secteurs.</p>
+            <div class="bg-white rounded-lg shadow-xl p-4 md:p-6">
+                <div class="chart-container">
+                    <canvas id="applicationChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-12 md:mb-16">
+            <h2 class="text-2xl md:text-3xl font-bold text-[#005F73] mb-8 text-center">Considérations Importantes</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg border-t-4 border-[#0A9396]">
+                    <h3 class="text-xl font-bold text-[#0A9396] mb-3">Hypothèses Clés ✔️</h3>
+                    <ul class="list-none space-y-3 text-gray-700">
+                        <li class="flex items-start"><span class="text-xl text-green-500 mr-3">✓</span> <div>**Linéarité :** Les relations entre variables doivent être linéaires.</div></li>
+                        <li class="flex items-start"><span class="text-xl text-green-500 mr-3">✓</span> <div>**Normalité Multivariée :** Les données devraient idéalement suivre une distribution normale multivariée.</div></li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg border-t-4 border-[#CA6702]">
+                    <h3 class="text-xl font-bold text-[#CA6702] mb-3">Points de Vigilance ⚠️</h3>
+                    <ul class="list-none space-y-3 text-gray-700">
+                        <li class="flex items-start"><span class="text-xl text-yellow-500 mr-3">!</span> <div>**Valeurs Aberrantes :** Peuvent biaiser fortement les résultats.</div></li>
+                        <li class="flex items-start"><span class="text-xl text-yellow-500 mr-3">!</span> <div>**Multicollinéarité :** Fortes corrélations au sein d'un même ensemble peuvent compliquer l'interprétation.</div></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center py-8 border-t border-gray-300 mt-8">
+            <p class="text-lg font-bold text-[#005F73]">L'Analyse Canonique : Un éclairage précieux sur les interconnexions de vos données.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        function wrapLabel(str, maxWidth) {
+            if (str.length <= maxWidth) {
+                return str;
+            }
+            const words = str.split(' ');
+            let lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                if ((currentLine + ' ' + words[i]).length > maxWidth) {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                } else {
+                    currentLine += ' ' + words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+        
+        const sharedTooltipOptions = {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                              return label.join(' ');
+                            } else {
+                              return label;
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        const appCtx = document.getElementById('applicationChart').getContext('2d');
+        const applicationChart = new Chart(appCtx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    wrapLabel('Sciences Sociales & Comportementales', 16),
+                    wrapLabel('Marketing & Analyse Clientèle', 16),
+                    wrapLabel('Biologie & Santé', 16),
+                    wrapLabel('Finance & Économie', 16),
+                    wrapLabel('Recherche Éducative', 16)
+                ],
+                datasets: [{
+                    label: 'Fréquence d\'Utilisation Conceptuelle',
+                    data: [85, 75, 60, 50, 40],
+                    backgroundColor: [
+                        '#0A9396',
+                        '#94D2BD',
+                        '#005F73',
+                        '#EE9B00',
+                        '#CA6702'
+                    ],
+                    borderColor: [
+                        '#0A9396',
+                        '#94D2BD',
+                        '#005F73',
+                        '#EE9B00',
+                        '#CA6702'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y', 
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Score Conceptuel d\'Application',
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    y: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false 
+                    },
+                    title: {
+                        display: true,
+                        text: 'Domaines où l\'ACC est Couramment Appliquée',
+                        font: {
+                            size: 18,
+                            weight: 'bold'
+                        },
+                        padding: {
+                            top: 10,
+                            bottom: 20
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                const item = tooltipItems[0];
+                                let label = item.chart.data.labels[item.dataIndex];
+                                if (Array.isArray(label)) {
+                                  return label.join(' ');
+                                } else {
+                                  return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
