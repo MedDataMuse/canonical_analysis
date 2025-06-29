@@ -1,6 +1,7 @@
 ## Qu'est-ce que l'ACC ?
 L'Analyse de Corrélation Canonique (ACC) explore les relations entre deux groupes de variables. Elle crée des combinaisons de variables (variates canoniques) de chaque groupe qui sont le plus fortement corrélées entre elles.
 
+[Description complète ici](https://meddatamuse.github.io/canonical_analysis/)
 ### Le Principe Simplifié
 <li>Variables X (Ex: Socio-démographie)
 
